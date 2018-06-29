@@ -1,6 +1,7 @@
 import smtplib
 
-from email.message import EmailMessage
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 smtp_mailer = smtplib.SMTP("smtp.gmail.com", 587)
 smtp_mailer.ehlo()
@@ -12,16 +13,15 @@ user_password = input("What is your password?")
 smtp_mailer.login(user_email, user_password)
 print("Login successful")
 
-message = EmailMessage()
-message.set_content("")
+message = MIMEMultipart()
 
 message["From"] = user_email
+message["To"] = input("What is the email address of the receiving party?")
+message["Subject"] = input("What is the subject of your email?")
 
-send_email = input("What is the email address of the receiving party?")
+email_body = input("What would you like to say in your email?")
 
-message["To"] = send_email
-
-message["Subject"] = input("What would you like to say in the email?")
+message.attach(MIMEText(email_body, "plain"))
 
 smtp_mailer.send_message(message)
 smtp_mailer.quit()
