@@ -1,5 +1,5 @@
 
-[1]: http://www.twitter.com/yashas_lokesh_
+[1]: http://www.twitter.com/yashaslokesh_
 [1.2]: http://i.imgur.com/wWzX9uB.png
 
 ### This is my #100DaysOfCode Repository
