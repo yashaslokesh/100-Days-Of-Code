@@ -3,6 +3,7 @@ import json
 import datetime
 import imaplib
 import pyzmail
+import getpass
 
 # Load file with login details
 with open("details.json") as details:
@@ -13,8 +14,9 @@ with open("details.json") as details:
 imap = imapclient.IMAPClient("imap.gmail.com", ssl=True)
 
 # Ask for password, never store
-password = input(f"Enter the password for {user_email}? ")
-imap.login(user_email, password)
+user_password = getpass.getpass(f"Enter the password for {user_email} (The password will not show "                                "up for security purposes): ")
+
+imap.login(user_email, user_password)
 print("Login successful")
 
 imap.select_folder("INBOX", readonly=False) # Select only the inbox, for testing
@@ -32,10 +34,7 @@ senders_dict = dict()
 
 """ 
     Add the email sender's name and email address by processing the "BODY[]" element of the email, 
-    using pyzmail. I found out about this module when a friend was talking to me about learning to code with
-    "Automate the Boring Stuff with Python" by Al Sweigart. The .get_addresses("from") method returns a single-
-    element list of a two-element tuple, and by accessing this tuple, I can add the sender's name and email
-    address to my final dictionary.
+    using pyzmail. I found out about this module when a friend was talking to me about learning to code with "Automate the Boring Stuff with Python" by Al Sweigart. The .get_addresses("from")method returns a single-element list of a two-element tuple, and by accessing this tuple, I can add the sender's name and email address to my final dictionary.
 """
 for uid in email_UIDs:
     message = pyzmail.PyzMessage.factory(unprocessed_messages[uid][b"BODY[]"])
@@ -44,15 +43,12 @@ for uid in email_UIDs:
 
 """ 
     Create a formatted string from the datetime object for today. Used to update the same file if
-    this script is run multiple times a day. In the future days of code, I hope to add an auto-replier 
-    based on the type of email, or on other criteria.
+    this script is run multiple times a day. In the future days of code, I hope to add an auto-replier based on the type of email, or on other criteria.
 """
 today_formatted = datetime.datetime.today().strftime("%m-%d-%Y")
 
 """
-    Comment out the next 3 lines of code below if you'd like to NOT save the list of organizations/people who sent 
-    you emails for today. That is, if they should not be saved into your local files, and should only be viewed
-    in the console. If you'd like to disable viewing the addresses in the console, comment out the very last line.
+    Comment out the next 3 lines of code below if you'd like to NOT save the list of organizations/people who sent you emails for today. That is, if they should not be saved into your local files, and should only be viewed in the console. If you'd like to disable viewing the addresses in the console, comment out the very last line.
 """
 
 with open(f"emails_senders_{today_formatted}.json", "w") as emails:
