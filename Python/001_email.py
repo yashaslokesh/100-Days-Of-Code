@@ -15,7 +15,7 @@ smtp_mailer.starttls()
 """
     Load and use details.json to prefill some fields in the email message that is eventually sent, makes it easier for testing.
 """
-with open("details.json") as details:
+with open("supporting_files/details.json") as details:
     json_data = json.loads(details.read())
     user_email = json_data["MyEmail"]
 
