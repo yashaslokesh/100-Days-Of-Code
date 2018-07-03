@@ -48,11 +48,12 @@ for uid in email_UIDs:
 today_formatted = datetime.datetime.today().strftime("%m-%d-%Y")
 
 """
-    Comment out the next 3 lines of code below if you'd like to NOT save the list of organizations/people who sent you emails for today. That is, if they should not be saved into your local files, and should only be viewed in the console. If you'd like to disable viewing the addresses in the console, comment out the very last line.
+    Comment out the code that opens a file and writes to it if you'd like to NOT save the list of organizations/people who sent you emails for today. That is, if they should not be saved into your local files, and should only be viewed in the console. If you'd like to disable viewing the addresses in the console, comment out the very last line.
 """
 
-with open(f"emails_senders_{today_formatted}.json", "w") as emails:
-    senders_json_data = json.dumps(senders_dict, indent=3, sort_keys=True)
-    emails.write(senders_json_data)
+senders_json_data = json.dumps(senders_dict, indent=3, sort_keys=True)
+
+# with open(f"emails_senders_{today_formatted}.json", "w") as emails:
+#     emails.write(senders_json_data)
 
 print(senders_json_data)
