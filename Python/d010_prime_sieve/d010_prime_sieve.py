@@ -6,9 +6,7 @@ numbers = list(range(2, number))
 
 for i in range(2, math.floor(math.sqrt(number))):
     for num in range(i**2, number, i):
-        try:
+        if num in numbers:
             numbers.remove(num)
-        except ValueError:
-            pass
 
 print(numbers)
