@@ -2,7 +2,7 @@ import csv
 
 names = list()
 
-with open("supporting_files/project_euler_p022_names.csv","r") as names_file:
+with open("../supporting_files/project_euler_p022_names.csv","r") as names_file:
     reader = csv.reader(names_file)
     for row in reader:
         for col in row:

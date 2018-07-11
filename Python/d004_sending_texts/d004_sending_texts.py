@@ -5,7 +5,7 @@ account_SID = "ACa7a85e5b259c5d97173ffe0248b396e0"
 auth_token = input("Input the Twilio authorization token: ")
 
 client = Client(account_SID, auth_token)
-with open("supporting_files/details.json") as details:
+with open("../supporting_files/details.json") as details:
     json_data = json.loads(details.read())
     twilio_number = json_data["TwilioNumber"]
 

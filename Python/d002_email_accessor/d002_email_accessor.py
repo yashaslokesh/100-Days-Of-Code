@@ -6,7 +6,7 @@ import pyzmail
 import getpass
 
 # Load file with login details
-with open("supporting_files/details.json") as details:
+with open("../supporting_files/details.json") as details:
     jsonData = json.loads(details.read())
     user_email = jsonData["MyEmail"]
 
