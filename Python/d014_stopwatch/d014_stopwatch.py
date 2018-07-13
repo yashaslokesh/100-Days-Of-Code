@@ -20,4 +20,6 @@ if start.strip().lower() == "s":
                 most_recent_time = time.time() # Set to the time once lap is signalled
     except KeyboardInterrupt:
         total = time.time() - start_time
-        print(f"The stopwatch lasted for {total} seconds and had {laps} laps")
+        lap_time = time.time() - most_recent_time
+        print(f"\nLap {laps} lasted for {lap_time} seconds"
+             f"\nThe stopwatch lasted for {total} seconds and had {laps} laps")
