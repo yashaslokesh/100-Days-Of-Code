@@ -22,7 +22,7 @@ def memoizer(calculate_function):
 def calculate(remaining_bricks, last_step):
     options = 0
     if remaining_bricks/float((last_step + 1)) <= 2:
-        print(f"{remaining_bricks} : {last_step}")
+        print("{0} : {1}".format(remaining_bricks, last_step))
         return 1
     else:
         options += 1
