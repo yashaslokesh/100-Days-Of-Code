@@ -14,5 +14,7 @@ while True:
     tweet = input("Enter your tweet text here: ")
     if len(tweet) <= 280:
         break
+    else:
+        print("Your tweet was too long, try again...\n")
 
 api.update_status(tweet)
