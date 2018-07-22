@@ -1,5 +1,5 @@
 
-import math
+from math import ceil
 
 def memoizer(calculate_function):
 
@@ -26,7 +26,7 @@ def calculate(remaining_bricks, last_step):
         return 1
     else:
         options += 1
-    limit = int(math.ceil(remaining_bricks/2.0))
+    limit = int(ceil(remaining_bricks/2.0))
     for i in range(last_step + 1, limit):
 
         options += calculate(remaining_bricks - i, i)
