@@ -1,5 +1,10 @@
 import tweepy
 
+# consumer_key = os.environ['TWEEPY_CONSUMER_KEY']
+# consumer_secret = os.environ["TWEEPY_CONSUMER_SECRET"]
+# access_token = os.environ["TWEEPY_ACCESS_TOKEN"]
+# access_token_secret = os.environ["TWEEPY_ACCESS_TOKEN_SECRET"]
+
 consumer_key = input("Input consumer key: ")
 consumer_secret = input("Input consumer secret: ")
 access_token = input("Input access token: ")
