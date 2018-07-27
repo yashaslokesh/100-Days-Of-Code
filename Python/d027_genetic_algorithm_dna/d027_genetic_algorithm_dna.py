@@ -6,11 +6,11 @@ class DNA():
         self.chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ !,."
         self.genes = [letter for letter in random.choices(self.chars, k=data_length)]
     
-    def fitness(self, target):
+    def calc_fitness(self, target):
         result = 0
         for i in range(len(self.genes)):
             result += 1 if self.genes[i] == target[i] else 0
-        return result / len(target)
+        self.fitness = result / len(target)
 
     def crossover(self, partner):
         child = DNA(len(self.genes))
