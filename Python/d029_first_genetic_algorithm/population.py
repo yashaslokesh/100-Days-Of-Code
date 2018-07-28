@@ -23,10 +23,6 @@ class Population():
     @property
     def generations(self):
         return self._generations
-    
-    @generations.setter
-    def generations(self, increment):
-        self._generations += increment
 
     @property
     def finished(self):
@@ -61,7 +57,7 @@ class Population():
 
             self.population[i] = child
 
-        self.generations += 1
+        self._generations += 1
 
     def getFittest(self):
         max_fitness = 0
@@ -74,26 +70,13 @@ class Population():
         if max_fitness == self.perfect:
             self.finished = True
 
-        return best_member.phrase()
+        return f"{best_member.phrase()}    Fitness : {round(best_member.fitness, 4)}"
     
     def averageFitness(self):
         total = 0
         for member in self.population:
             total += member.fitness
-        return total / len(self.population)
+        return round(total / len(self.population), 4)
 
     def getAllPhrases(self):
-        return "\n".join([f"{member.phrase()}    Fitness : {round(member.fitness, 3)}" for member in self.population])
-    
-
-
-    
-
-    
-
-
-            
-
-        
-
-
+        return "\n".join([f"{member.phrase()}    Fitness : {round(member.fitness, 4)}" for member in self.population])

@@ -14,11 +14,15 @@ class DNA():
         result = 0
         for i in range(len(self.genes)):
             result += 1 if self.genes[i] == target[i] else 0
-        self._fitness = result / len(target)
+        self.fitness = result / len(target)
     
     @property
     def fitness(self):
         return self._fitness
+    
+    @fitness.setter
+    def fitness(self, value):
+        self._fitness = value
 
     def crossover(self, partner):
 
