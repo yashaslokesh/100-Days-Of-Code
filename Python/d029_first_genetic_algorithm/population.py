@@ -1,5 +1,6 @@
 import dna
 import random
+import operator
 
 class Population():
 
@@ -11,7 +12,7 @@ class Population():
 
         self.population = [dna.DNA(len(self.target_string)) for _ in range(max_population)]
 
-        self.calcFitness()
+        self.calc_fitness()
 
         self.matingPool = []
         self._generations = 0
@@ -34,49 +35,56 @@ class Population():
 
     # End Getters / Setters
 
-    def calcFitness(self):
-        for member in self.population:
-            member.calc_fitness(self.target_string)
+    def calc_fitness(self):
+        [member.calc_fitness(self.target_string) for member in self.population]
 
-    def naturalSelection(self):
+    def natural_selection(self):
         self.matingPool.clear()
-        max_fitness = 0
-        for member in self.population:
-            max_fitness = max(member.fitness, max_fitness)
+
+        max_fitness = max([member.fitness for member in self.population])
+
         for member in self.population:
             fitness = member.fitness / max_fitness
             self.matingPool += [member] * int(fitness * 100)
 
     def generate(self):
+        # Don't use list comprehension for readability
         for i,_ in enumerate(self.population):
-            parent_one = random.choice(self.matingPool)
-            parent_two = random.choice(self.matingPool)
-
-            child = parent_one.crossover(parent_two)
+            # Child is created by selecting two parents from the mating pool and using genetic crossover
+            child = random.choice(self.matingPool).crossover(random.choice(self.matingPool))
+            # We then use mutation to introduce small variations to the system, in case the initial
+            # random character selection did not bring out the required letters in spaces
             child.mutate(self.mutation_rate)
 
             self.population[i] = child
 
         self._generations += 1
 
-    def getFittest(self):
-        max_fitness = 0
-        for member in self.population:
-            if member.fitness > max_fitness:
-                # best_index = index
-                best_member = member
-                max_fitness = member.fitness
+    
+    """
+        Obtain the max_fitness by using the max function on a list of all of the population members'
+        fitness values. Then we sort the population by fitness value using the sort method of the 
+        list data structure and the operator module. The best_member will then be the last element in the list, 
+        since the fitness values were sorted in ascending order.
+    """
+    def get_fittest(self):
+
+        max_fitness = max([member.fitness for member in self.population])
+        self.population.sort(key=operator.attrgetter("fitness"))
+        best_member = self.population[-1]
         
         if max_fitness == self.perfect:
             self.finished = True
 
         return f"{best_member.phrase()}    Fitness : {round(best_member.fitness, 4)}"
     
-    def averageFitness(self):
-        total = 0
-        for member in self.population:
-            total += member.fitness
-        return round(total / len(self.population), 4)
+    def average_fitness(self):
+        total_fitness = sum([member.fitness for member in self.population])
 
-    def getAllPhrases(self):
+        return round(total_fitness / len(self.population), 4)
+
+    """
+        Join each phrase and its fitness value with a new line in between for an easy-to-read string
+    """
+    def get_all_phrases(self):
         return "\n".join([f"{member.phrase()}    Fitness : {round(member.fitness, 4)}" for member in self.population])

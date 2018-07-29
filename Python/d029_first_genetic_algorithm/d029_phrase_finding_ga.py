@@ -13,37 +13,38 @@ def evolve(target, max_population, mutation_rate):
 
     try:
         while not population.finished:
-            population.naturalSelection()
+            population.natural_selection()
             population.generate()
-            population.calcFitness()
-            population.getFittest()
+            population.calc_fitness()
+            population.get_fittest()
 
         end_time = round(time.time() - start_time, 3)
 
-        print(f"""\nFinal generation phrases: \n{population.getAllPhrases()}
+        print(f"""\nFinal generation phrases: \n{population.get_all_phrases()}
 
     Phrase: {target}
     Phrase finding took {end_time} seconds over {population.generations} generations
-    The average fitness by the final generation is {population.averageFitness()}
+    The average fitness by the final generation is {population.average_fitness()}
     The population of each generation was {max_population} with a mutation rate of {mutation_rate}\n""")
 
     except KeyboardInterrupt:
 
         end_time = round(time.time() - start_time, 3)
 
-        print(f"""\nPhrases for generation {population.generations}: \n{population.getAllPhrases()}
+        print(f"""\nPhrases for generation {population.generations}: \n{population.get_all_phrases()}
 
     Phrase: {target}
-    Closest phrase from this generation: {population.getFittest()}
+    Closest phrase from this generation: {population.get_fittest()}
     Incomplete Phrase finding took {end_time} seconds over {population.generations} generations
-    The average fitness by generation {population.generations} is {population.averageFitness()}
+    The average fitness by generation {population.generations} is {population.average_fitness()}
     The population of each generation was {max_population} with a mutation rate of {mutation_rate}\n""")
     
 def main():
     target_phrase = input("Input phrase you'd like the genetic algorithm to reach, with only letters, spaces, and any of {.!,?}: ")
     max_population = int(input("Enter a population size for the genetic algorithm: "))
     mutation_rate = float(input("Enter the mutation rate that will be used on your population. Recommended to be < 0.03, or else population will have too much randomness: "))
-    evolve(target_phrase,max_population,mutation_rate)
+
+    evolve(target_phrase.strip(),max_population,mutation_rate)
 
 if __name__ == '__main__':
     main()
