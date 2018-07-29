@@ -1,4 +1,5 @@
 import random
+import math
 
 class DNA():
     
@@ -13,7 +14,7 @@ class DNA():
     def calc_fitness(self, target):
         raw_fitness = sum([1 if self.genes[i] == target[i] else 0
                            for i,_ in enumerate(self.genes)])
-        self.fitness = raw_fitness / len(target)
+        self.fitness = math.exp(raw_fitness) / math.exp(len(target))
     
     @property
     def fitness(self):

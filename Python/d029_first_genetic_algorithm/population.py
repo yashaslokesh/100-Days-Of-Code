@@ -1,6 +1,7 @@
 import dna
 import random
 import operator
+import math
 
 class Population():
 
@@ -45,7 +46,7 @@ class Population():
 
         for member in self.population:
             fitness = member.fitness / max_fitness
-            self.matingPool += [member] * int(fitness * 100)
+            self.matingPool += [member] * int(fitness * 10_000)
 
     def generate(self):
         # Don't use list comprehension for readability

@@ -20,7 +20,7 @@ def evolve(target, max_population, mutation_rate):
 
             if population.generations % 100 == 0:
                 print(f"UPDATE-- Generation: {population.generations}\n"
-                      f"Best phrase: \'{population.get_fittest()}\'\n")
+                      f"Best phrase: {population.get_fittest()}\n")
 
         end_time = round(time.time() - start_time, 3)
 
