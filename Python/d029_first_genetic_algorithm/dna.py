@@ -26,7 +26,7 @@ class DNA():
     def crossover(self, partner):
         child = DNA(len(self.genes))
         mid = int(random.randrange(len(self.genes)))
-
+        # Keep this parent's character if greater than the midpoint split, otherwise the other parent's
         child.genes = [gene if i > mid else partner.genes[i]
                        for i, gene in enumerate(self.genes)]
         return child
