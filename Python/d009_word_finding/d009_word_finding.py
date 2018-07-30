@@ -2,7 +2,7 @@ import itertools
 
 dictionary = list()
 
-with open("english3.txt") as f:
+with open("supporting_files/english3.txt") as f:
     for line in f.readlines():
         dictionary.append(line.strip())
 
