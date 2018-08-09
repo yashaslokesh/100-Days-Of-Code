@@ -1,21 +1,25 @@
 from twilio.rest import Client
 import json
+import os
+import sys
 
-account_SID = "ACa7a85e5b259c5d97173ffe0248b396e0"
-auth_token = input("Input the Twilio authorization token: ")
+sys.path.append('/Users/lokeshkrishnappa/Desktop/python-projects/100-Days-Of-Code/Python')
+
+account_SID = os.environ.get("TWILIO_ACCOUNT_SID")
+auth_token = os.environ.get("TWILIO_AUTH_TOKEN")
 
 client = Client(account_SID, auth_token)
-with open("../supporting_files/details.json") as details:
+with open("supporting_files/details.json") as details:
     json_data = json.loads(details.read())
     twilio_number = json_data["TwilioNumber"]
 
 my_number = "+1" + input("Enter your number, with no spaces or extra characters: ")
 
-import d002_email_accessor
+from d002_email_accessor import email_accessor
 
 message_body = "You received email from these organizations/people in your gmail inbox today:"
 
-for name in d002_email_accessor.senders_dict:
+for name in email_accessor.senders_dict:
     message_body += f"\n{name}"
 
 message = client.messages.create(body = f"{message_body}", 
