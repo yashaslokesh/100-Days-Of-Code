@@ -1,8 +1,9 @@
 import requests
 import json
+import os
 
 # From https://openweathermap.org/
-API_KEY = 'YOUR_API_KEY'
+API_KEY = os.environ.get("OPEN_WEATHER_MAP_KEY")
 
 def get_temp(city):
     url = f"http://api.openweathermap.org/data/2.5/find?q={city}&APPID={API_KEY}"
@@ -17,7 +18,7 @@ def get_temp(city):
 def main():
     city = input("\nEnter a city name to get weather data for it: ")
     temp = get_temp(city)
-    print(f"\nThe temperature for {city.upper()} in degrees Celsius is: {temp}\n")
+    print(f"\nThe temperature for {city.upper()} in degrees Celsius is: {round(temp, 2)}\n")
 
 if __name__ == '__main__':
     main()
