@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="utf-8" />
+        <title>Staircase Building</title>
+        <link rel="stylesheet" href="/theme/css/main.css" />
+
+        <!--[if IE]>
+            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+</head>
+
+<body id="index" class="home">
+        <header id="banner" class="body">
+                <h1><a href="/">Yashas Lokesh </a></h1>
+                <nav><ul>
+                    <li><a href="/category/misc.html">misc</a></li>
+                    <li class="active"><a href="/category/posts.html">posts</a></li>
+                </ul></nav>
+        </header><!-- /#banner -->
+<section id="content" class="body">
+  <article>
+    <header>
+      <h1 class="entry-title">
+        <a href="/staircase-building.html" rel="bookmark"
+           title="Permalink to Staircase Building">Staircase Building</a></h1>
+    </header>
+
+    <div class="entry-content">
+<footer class="post-info">
+        <abbr class="published" title="2018-07-22T00:00:00-04:00">
+                Published: Sun 22 July 2018
+        </abbr>
+		<br />
+        <abbr class="modified" title="2018-08-11T00:00:00-04:00">
+                Updated: Sat 11 August 2018
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/yashas-lokesh.html">Yashas Lokesh</a>
+        </address>
+<p>In <a href="/category/posts.html">posts</a>.</p>
+
+</footer><!-- /.post-info -->      <p>I recently received an invitation to join a Google Foobar challenge. When I was searching "itertools" for building a Python word scrambler, the screen opened up slightly and said "You're speaking our language. Up for a challenge?" I promptly clicked the green button (I forgot the button caption) to accept.</p>
+<p>The challenge site assigned me a first challenge, which wasn't difficult. I completed a few more challenges at a similar difficulty. The problem I'm going to talk about in this post was the most challenging for me <em>so far</em>.</p>
+<p>This is the challenge description:</p>
+<blockquote>
+<p>With her LAMBCHOP doomsday device finished, Commander Lambda is preparing for her debut on the galactic stage - but in order to make a grand entrance, she needs a grand staircase! As her personal assistant, you've been tasked with figuring out how to build the best staircase EVER.</p>
+<p>Lambda has given you an overview of the types of bricks available, plus a budget. You can buy different amounts of the different types of bricks (for example, 3 little pink bricks, or 5 blue lace bricks). Commander Lambda wants to know how many different types of staircases can be built with each amount of bricks, so she can pick the one with the most options.</p>
+<p>Each type of staircase should consist of 2 or more steps. No two steps are allowed to be at the same height - each step must be lower than the previous one. All steps must contain at least one brick. A step's height is classified as the total amount of bricks that make up that step. For example, when N = 3, you have only 1 choice of how to build the staircase, with the first step having a height of 2 and the second step having a height of 1: (# indicates a brick)</p>
+</blockquote>
+<div class="highlight"><pre><span></span>#
+##
+21
+When N = 4, you still only have 1 staircase choice:
+
+#
+#
+##
+31
+But when N = 5, there are two ways you can build a staircase 
+from the given bricks. The two staircases can have heights (4, 1) or (3, 2), 
+as shown below:
+
+#
+#
+#
+##
+41
+
+#
+##
+##
+32
+</pre></div>
+
+
+<blockquote>
+<p>Write a function called answer(n) that takes a positive integer n and returns the number of different staircases that can be built from exactly n bricks. n will always be at least 3 (so you can have a staircase at all), but no more than 200, because Commander Lambda's not made of money!</p>
+</blockquote>
+<p>With this problem description in mind, and since the challenge already explained how to handle the small cases like three and five, I decided to calculate how many staircase options you have if you use ten bricks:</p>
+<div class="highlight"><pre><span></span>10 -&gt; (9,1), (8,2), (7,3), (6,4)
+</pre></div>
+
+
+<p>But then, two of these four options can be broken down further using the larger number. The nine bricks in <strong>(9,1)</strong> can be broken down further to make more staircase options. The subscript is to indicate that the nine bricks originated from ten:</p>
+<div class="highlight"><pre><span></span>9_10 -&gt; (8,1), (7,2), (6,3), (5,4)
+</pre></div>
+
+
+<p>Notice that the first option, (8,1), won't work. If we use it, we'll end up with the staircase:</p>
+<div class="highlight"><pre><span></span>#
+#
+#
+#
+#
+#
+#
+###
+811
+</pre></div>
+
+
+<p>Which is not a valid option because the last two steps are the same height. So now we have a rule that if we're breaking down the larger of the two numbers in a parent option, then all of the child options' smaller numbers must be greater than their parent options' smaller number:</p>
+<div class="highlight"><pre><span></span>#
+#
+#
+#
+#
+##
+###
+721
+</pre></div>
+
+
+<p>This option is valid because two, which is the smaller number in the child option of (7,2), is greater than one, which is the smaller number in the parent option.</p>
+<p>Taking this rule and the challenge's rules, we can construct the solutions for 10 bricks:</p>
+<div class="highlight"><pre><span></span>10 -&gt; (9,1), (8,2), (7,3), (6,4)
+
+9_10 -&gt; (7,2), (6,3), (5,4)
+8_10 -&gt; (5,3)
+
+7_9 -&gt; (4,3)
+</pre></div>
+
+
+<p>And we see that we have nine staircase options if we start with ten bricks. </p>
+<p>I thought the most straightforward way to solve this challenge was to use a recursive function that will take two arguments, a pair of staircase option values. The first would be the bricks we have remaining to build with, the larger of the two values. The second argument would be the height of the previous step:</p>
+<p _="%" endhighlight>{% highlight python %}
+def calculate(remaining_bricks, last_step):
+    ...</p>
+<p>For a recursive function, we need a base case. While looking at the staircase options, I realized that if we take the remaining_bricks value and we divide it by the last_step value plus one, and then check if that result is less than or equal to two, we can decide if we'll be able to break down the remaining_bricks further. I haven't come up with a formal proof, yet, but it worked for all of the large and small cases I tested, so I started to use it as the base case. We return one for the base case, since there is only one option if we cannot break down the numbers further:</p>
+<p _="%" endhighlight>{% highlight python %}
+def calculate(remaining_bricks, last_step):
+    if remaining_bricks/(last_step + 1) &lt;= 2:
+        return 1</p>
+<p>Next, we need a variable that will keep track of the total amount of options. We can simply call it <strong>options</strong>. For a sample of ten bricks, we'll have nine options, but according to the base case, we will only count the final child nodes. And so, we'll add an "else" statement to the base case, so that if we are not at a final child node, we'll still increment the options count by one to count the intermediate nodes:</p>
+<p _="%" endhighlight>{% highlight python %}
+def calculate(remaining_bricks, last_step):
+    options = 0
+    if remaining_bricks/(last_step + 1) &lt;= 2:
+        return 1
+    else:
+        options += 1</p>
+<p>Next we add the code for finding all of the breakdowns from the given parameters. We go from the range of the last_step + 1 (the new minimum) to a limit. Inside the code black, we call back the calculate function with the new brick configurations:</p>
+<p _="%" endhighlight>{% highlight python %}
+for i in range(last_step + 1, limit):
+    options += calculate(remaining_bricks - i, i)</p>
+<p>But what is the limit? Recall: </p>
+<div class="highlight"><pre><span></span>10 -&gt; (9,1), (8,2), (7,3), (6,4)
+9_10 -&gt; (7,2), (6,3), (5,4)
+</pre></div>
+
+
+<p>So a general trend seems to be that we divide the remaining bricks by two and round up. So we'll do just that by assigning this value to <strong>limit</strong>, after importing math.ceil():</p>
+<p>{% highlight python %}
+from math import ceil</p>
+<p>limit = int(ceil(remaining_bricks/2.0))</p>
+<p _="%" endhighlight>for i in range(last_step + 1, limit):
+    options += calculate(remaining_bricks - i, i)
+return options</p>
+<p>We can then call the calculate function from our main answer(n) function. When we do the initial call of calculate(n, 0), options will be incremented by one before reaching the for loop, so we will correct for this by subtracting one from calculate(n, 0)'s result:</p>
+<p _="%" endhighlight>{% highlight python %}
+def answer(n):
+    return calculate(n, 0) - 1</p>
+<p>Our code looks like this now:</p>
+<p>{% highlight python %}
+from math import ceil</p>
+<p>def calculate(remaining_bricks, last_step):
+    options = 0
+    if remaining_bricks/float((last_step + 1)) &lt;= 2:
+        return 1
+    else:
+        options += 1
+    limit = int(ceil(remaining_bricks/2.0))
+    for i in range(last_step + 1, limit):
+        options += calculate(remaining_bricks - i, i)
+    return options</p>
+<p _="%" endhighlight>def answer(n):
+    return calculate(n, 0) - 1</p>
+<p>When I tried out this code on small numbers, I got the result fairly quickly. The problem was, it was taking too long to process answer(200). According to the challenge, answer(200) should give me an answer of about 487 million. I looked up how to speed up recursion, and a small article online said to use memoization. In Python3, this is already implemented as a decorator function as functools.lrucache. <a href="https://wiki.python.org/moin/PythonDecoratorLibrary#Memoize">The Python Wiki presented code for creating your own memoizer class</a>, so I implemented a version of it:</p>
+<p>{% highlight python %}
+def memoizer(calculate_function):</p>
+<div class="highlight"><pre><span></span><span class="kr">class</span> <span class="nx">calculation_memoizer</span><span class="p">(</span><span class="nx">object</span><span class="p">)</span><span class="o">:</span>
+    <span class="nx">def</span> <span class="nx">__init__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="nx">calculate_function</span><span class="p">)</span><span class="o">:</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">calculate_function</span> <span class="o">=</span> <span class="nx">calculate_function</span>
+        <span class="nx">self</span><span class="p">.</span><span class="nx">calculations_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="nx">def</span> <span class="nx">__call__</span><span class="p">(</span><span class="nx">self</span><span class="p">,</span> <span class="o">*</span><span class="nx">args</span><span class="p">)</span><span class="o">:</span>
+        <span class="k">if</span> <span class="nx">args</span> <span class="k">in</span> <span class="nx">self.calculations_cache</span>:
+            <span class="kt">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">calculations_cache</span><span class="p">[</span><span class="nx">args</span><span class="p">]</span>
+        <span class="k">else</span><span class="o">:</span>
+            <span class="nx">self</span><span class="p">.</span><span class="nx">calculations_cache</span><span class="p">[</span><span class="nx">args</span><span class="p">]</span> <span class="o">=</span> <span class="nx">self</span><span class="p">.</span><span class="nx">calculate_function</span><span class="p">(</span><span class="o">*</span><span class="nx">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nx">self</span><span class="p">.</span><span class="nx">calculations_cache</span><span class="p">[</span><span class="nx">args</span><span class="p">]</span>
+
+<span class="k">return</span> <span class="nx">calculation_memoizer</span><span class="p">(</span><span class="nx">calculate_function</span><span class="p">)</span>
+</pre></div>
+
+
+<p>{% endhighlight %}</p>
+<p>I created a decorator function memoizer which would take a function as a parameter. The function returns a class initialized with the function parameter. The calculation_memoizer class creates a dictionary for storing calculations that have already been made. The <strong>call</strong> magic method searches for the args of calculate() in its dictionary. If it finds those args, it will return the previously calculated value. Otherwise, It will add those arguments to the dictionary and obtain the result from calculate(args) and assign it as the value. Once I added this code, answer(200) finished in a few seconds.</p>
+<p>You can find the source code for my solution in my <a href="https://github.com/yashaslokesh/100-Days-Of-Code/blob/master/Python/d015_staircase/d015_staircase.py">100-Days-Of-Code repo</a> and in my <a href="https://github.com/yashaslokesh/google-foobar/tree/master/level_3/the_grandest_staircase_of_them_all">google-foobar repo</a>.</p>
+<p>Email any questions or concerns to yashloke@terpmail.umd.edu or reach out to me on Twitter <a href="https://twitter.com/yashaslokesh_">@yashaslokesh_</a> to have a discussion.</p>
+    </div><!-- /.entry-content -->
+
+  </article>
+</section>
+        <section id="extras" class="body">
+                <div class="blogroll">
+                        <h2>links</h2>
+                        <ul>
+                            <li><a href="http://getpelican.com/">Pelican</a></li>
+                            <li><a href="http://python.org/">Python.org</a></li>
+                            <li><a href="http://jinja.pocoo.org/">Jinja2</a></li>
+                            <li><a href="#">You can modify those links in your config file</a></li>
+                        </ul>
+                </div><!-- /.blogroll -->
+                <div class="social">
+                        <h2>social</h2>
+                        <ul>
+
+                            <li><a href="#">You can add links in your config file</a></li>
+                            <li><a href="#">Another social link</a></li>
+                        </ul>
+                </div><!-- /.social -->
+        </section><!-- /#extras -->
+
+        <footer id="contentinfo" class="body">
+                <address id="about" class="vcard body">
+                Proudly powered by <a href="http://getpelican.com/">Pelican</a>, which takes great advantage of <a href="http://python.org">Python</a>.
+                </address><!-- /#about -->
+
+                <p>The theme is by <a href="http://coding.smashingmagazine.com/2009/08/04/designing-a-html-5-layout-from-scratch/">Smashing Magazine</a>, thanks!</p>
+        </footer><!-- /#contentinfo -->
+
+</body>
+</html>
