@@ -30,8 +30,6 @@ def record(name):
 
     except KeyboardInterrupt:
         print(f"\nRecording finished, audio file named {name} created.")
-    except Exception:
-        print(Exception)
 
 def transcribe(filename):
     client = speech.SpeechClient()
@@ -49,10 +47,7 @@ def transcribe(filename):
     # Detects speech in the audio file
     transcription = client.recognize(config, audio)
 
-    print("\n")
-    for i,result in enumerate(transcription.results):
-        print(f"Transcription {i}: {result.alternatives[0].transcript}")
-    print("\n")
+    return transcription.results
 
 def main():
     title = input("\nInput a name for your audio recording file, date will automatically be added: ")
@@ -60,7 +55,12 @@ def main():
     name = f"{title}-audio-recording-{today_formatted}.wav"
 
     record(name)
-    transcribe(name)
+    results = transcribe(name)
+
+    print("\n")
+    for i,result in enumerate(results):
+        print(f"Transcription {i}: {result.alternatives[0].transcript}")
+    print("\n")
 
 if __name__ == '__main__':
     main()
