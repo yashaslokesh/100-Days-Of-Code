@@ -37,7 +37,10 @@ class Population():
     # End Getters / Setters
 
     def calc_fitness(self):
-        [member.calc_fitness(self.target_string) for member in self.population]
+        # Don't use list comprehension for side effects
+        # [member.calc_fitness(self.target_string) for member in self.population]
+        for member in self.population:
+            member.calc_fitness(self.target_string)
 
     def natural_selection(self):
         self.matingPool.clear()
