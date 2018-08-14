@@ -18,12 +18,12 @@ def translate_phrase(source, target, phrase):
         result = client.translate(phrase, source_language=source_language[0], 
                  target_language=target_language[0])
         print(f'{source} was used as the source language.\n'
-              f'Translating "{phrase}" to {target}:\n{result["translatedText"]}')
+              f'Translating "{phrase}" to {target}:\n\n{result["translatedText"]}')
     else:
         result = client.translate(phrase, target_language=target_language[0])
 
         print(f'The language {result["detectedSourceLanguage"]} was detected.\n'
-              f'Translating "{phrase}" to {target}:\n{result["translatedText"]}')
+              f'Translating "{phrase}" to {target}:\n\n{result["translatedText"]}')
     
     print()
 
