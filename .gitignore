@@ -3,3 +3,4 @@ Python/supporting_files/globals.py
 **.pyc
 Python/d034_spotify_song_lengths/data.json
 .ipynb_checkpoints
+*.wav
