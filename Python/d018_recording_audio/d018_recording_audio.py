@@ -1,8 +1,10 @@
 import datetime
+import io
+import os
 
-title = input("\nInput a name for your audio recording file: ")
-today_formatted = datetime.datetime.today().strftime("%m-%d-%Y")
-name = f"{title}-audio-recording-{today_formatted}.wav"
+from google.cloud import speech
+from google.cloud.speech import enums
+from google.cloud.speech import types
 
 samplerate = 44100
 channels = 1
@@ -18,24 +20,18 @@ def callback(audio_data, frames, time, status):
 import sounddevice as sd
 import soundfile as sf
 
-try:
-    with sf.SoundFile(name, mode="x", samplerate= samplerate, channels= channels) as f:
-        with sd.InputStream(samplerate=samplerate, channels=channels, callback=callback):
-            print("\nRecording started.\nPress Ctrl+C to end recording\n")
-            while True:
-                f.write(qu.get())
+def record(name):
+    try:
+        with sf.SoundFile(name, mode="x", samplerate= samplerate, channels= channels) as f:
+            with sd.InputStream(samplerate=samplerate, channels=channels, callback=callback):
+                print("\nRecording started.\nPress Ctrl+C to end recording\n")
+                while True:
+                    f.write(qu.get())
 
-except KeyboardInterrupt:
-    print(f"\nRecording finished, audio file named {name} created.")
-except Exception:
-    print(Exception)
-
-import io
-import os
-
-from google.cloud import speech
-from google.cloud.speech import enums
-from google.cloud.speech import types
+    except KeyboardInterrupt:
+        print(f"\nRecording finished, audio file named {name} created.")
+    except Exception:
+        print(Exception)
 
 def transcribe(filename):
     client = speech.SpeechClient()
@@ -58,5 +54,13 @@ def transcribe(filename):
         print(f"Transcription {i}: {result.alternatives[0].transcript}")
     print("\n")
 
-transcribe(name)
+def main():
+    title = input("\nInput a name for your audio recording file, date will automatically be added: ")
+    today_formatted = datetime.datetime.today().strftime("%m-%d-%Y")
+    name = f"{title}-audio-recording-{today_formatted}.wav"
 
+    record(name)
+    transcribe(name)
+
+if __name__ == '__main__':
+    main()
