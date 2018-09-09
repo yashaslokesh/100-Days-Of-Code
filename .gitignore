@@ -4,3 +4,4 @@ Python/supporting_files/globals.py
 Python/d034_spotify_song_lengths/data.json
 .ipynb_checkpoints
 *.wav
+*.mp3
