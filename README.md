@@ -8,4 +8,4 @@ I found out about this challenge while listening to [episode #140 of the Talk Py
 
 Follow me on twitter for future updates on my programming progress and other things [![alt text][1.2]][1]
 
-**Python 100 days:** June 29th, 2018 - Present
+**Python 100 days:** June 29th, 2018 - August 30th, 2018 (63 days),
