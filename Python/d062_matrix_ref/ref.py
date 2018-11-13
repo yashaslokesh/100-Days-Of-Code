@@ -38,7 +38,6 @@ def _cancel_out_pivot_cols(matrix):
     """
     pivot_found = False
     row = -1
-    col = -1
     while not pivot_found and row != len(matrix):
         row += 1
 
