@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/lokeshkrishnappa/anaconda3/bin/python"
+    "python.pythonPath": "/Users/lokeshkrishnappa/anaconda3/envs/100days/bin/python",
+    "python.linting.pylintEnabled": true
 }
